@@ -9,8 +9,8 @@ import { CUT } from '../cutout.js';
 import { MATERIAL } from '../materials.js';
 import { el } from './dom.js';
 import { histPush } from './history.js';
-import { removeMode, syncRemoveUI, cancelRemove } from './remove.js';
-import { setDrawMsg, clearPreview, syncDrawControls } from './walls.js';
+import { removeMode, syncRemoveUI, cancelRemove, restoreRemovals } from './remove.js';
+import { setDrawMsg, clearPreview, syncDrawControls, setDrawnWalls } from './walls.js';
 import { lastBuilt, refreshFins } from './finbuild.js';
 import { setGizmo } from './pose.js';
 import { paintOverhangs } from './part.js';
@@ -193,6 +193,7 @@ el('material').addEventListener('change', () => {
 export function syncFinsToggleUI() {
   el('fins-toggle').classList.toggle('primary', finsVisible);
   el('fins-toggle').textContent = finsVisible ? 'Fins on' : 'Add fins';
+  el('fins-clear').hidden = !finsVisible;
   el('fin-opts').hidden = !finsVisible;
   syncSectionSums();
 }
@@ -258,11 +259,8 @@ export function syncSectionSums() {
 el('fin-opts').addEventListener('input', syncSectionSums);
 el('fin-opts').addEventListener('change', syncSectionSums);
 
-el('fins-toggle').addEventListener('click', () => {
-  histPush();
-  finsVisible = !finsVisible;
-  if (!finsVisible) drawAugment = false;
-  if (removeMode) cancelRemove();
+/** Re-sync every fin control and rebuild, after finsVisible or the fin edits change. */
+function finsChanged() {
   syncFinsToggleUI();
   setDrawMsg('');
   clearPreview();
@@ -271,6 +269,26 @@ el('fins-toggle').addEventListener('click', () => {
   syncRemoveUI();
   setGizmo();
   refreshFins();
+}
+
+// Clear fins: back to a bare part. Drops the hand-drawn walls/braces and the
+// removed-fin marks too, so the next Add fins starts fresh. One undo restores it all.
+el('fins-clear').addEventListener('click', () => {
+  histPush();
+  if (removeMode) cancelRemove();
+  finsVisible = false;
+  drawAugment = false;
+  setDrawnWalls([]);
+  restoreRemovals([]);
+  finsChanged();
+});
+
+el('fins-toggle').addEventListener('click', () => {
+  histPush();
+  finsVisible = !finsVisible;
+  if (!finsVisible) drawAugment = false;
+  if (removeMode) cancelRemove();
+  finsChanged();
 });
 
 el('augment-toggle').addEventListener('click', () => {

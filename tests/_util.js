@@ -2,8 +2,16 @@
 // --allow-read tests/` runs offline. The support engine is pure geometry, so
 // every test is: build some geometry, assert an invariant on the triangle soup.
 
-export const WEB = new URL('../web/', import.meta.url).pathname;
-export const MODELS = new URL('../prototype/stress/models/', import.meta.url).pathname;
+/** A file: URL as a filesystem path. URL.pathname is '/D:/x/' on Windows, which
+ *  Deno's fs calls reject (os error 123), and it leaves %20 etc. undecoded. */
+export function urlPath(url) {
+  const p = decodeURIComponent(url.pathname);
+  return Deno.build.os === 'windows' ? p.replace(/^\/([A-Za-z]:)/, '$1') : p;
+}
+
+// WEB feeds dynamic import(), which wants a URL; MODELS feeds Deno.readFileSync, which wants a path.
+export const WEB = new URL('../web/', import.meta.url).href;
+export const MODELS = urlPath(new URL('../prototype/stress/models/', import.meta.url));
 
 export const { buildTopology, analyze } = await import(`${WEB}overhangs.js`);
 export const fins = await import(`${WEB}fins.js`);

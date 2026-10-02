@@ -115,6 +115,37 @@ function readAsciiSTL(text) {
   return Float32Array.from(out);
 }
 
+const SAVE_TYPES = {
+  stl: { description: 'STL mesh', accept: { 'model/stl': ['.stl'] } },
+  '3mf': { description: '3MF model', accept: { 'model/3mf': ['.3mf'] } },
+};
+
+/**
+ * Ask where to save, with the browser's native Save As dialog (File System Access
+ * API: Edge/Chrome, secure contexts incl. localhost). Browsers without it fall back
+ * to a plain download. Resolves true when written, false when the user cancelled.
+ */
+export async function saveAs(blob, filename) {
+  if (typeof window.showSaveFilePicker !== 'function') {
+    download(blob, filename);
+    return true;
+  }
+  const type = SAVE_TYPES[filename.split('.').pop().toLowerCase()];
+  let handle;
+  try {
+    handle = await window.showSaveFilePicker({
+      suggestedName: filename, id: 'support-fins-export', types: type ? [type] : undefined,
+    });
+  } catch (e) {
+    if (e.name === 'AbortError') return false;      // the user closed the dialog
+    download(blob, filename);                       // picker blocked (e.g. in an iframe)
+    return true;
+  }
+  const out = await handle.createWritable();
+  try { await out.write(blob); } finally { await out.close(); }
+  return true;
+}
+
 /** Trigger a download without touching the network. */
 export function download(blob, filename) {
   const url = URL.createObjectURL(blob);

@@ -1,7 +1,7 @@
 /**
  * Export: the oriented part plus the fins/pad, as STL or 3MF.
  */
-import { writeBinarySTL, download } from '../stl.js';
+import { writeBinarySTL, saveAs } from '../stl.js';
 import { writeThreeMF } from '../threemf.js';
 import { el } from './dom.js';
 import { part, topology, lastResult, rotM3, partName } from './part.js';
@@ -74,11 +74,15 @@ function setOpen(open) {
 
 btn.addEventListener('click', () => setOpen(menu.hidden));
 for (const [id, write] of Object.entries(FORMATS)) {
-  el(id).addEventListener('click', () => {
+  el(id).addEventListener('click', async () => {
     setOpen(false);
     const g = buildExportGeometry();
     if (!g) return;
-    download(...write(g));
+    try {
+      await saveAs(...write(g));
+    } catch (e) {
+      alert(`Export failed: ${e.message}`);
+    }
   });
 }
 // click-away / Esc close it, the usual menu contract

@@ -26,5 +26,12 @@ Runs entirely in the browser — vanilla ES modules, no build step.
 
 Semantic colours (overhang red, small-overhang amber, bed blue, pad gold) are untouched — they carry meaning.
 
+## HiVEMiND feature changes
+| Change | Where |
+|---|---|
+| **Export → Save As dialog** — every Export menu item asks where to save (File System Access API; plain download fallback in browsers without it; Cancel is silent) | `web/stl.js` `saveAs()`, `web/ui/export.js` |
+| **Clear fins** button beside *Fins on* (shown only while fins are on) — fins off + drops hand-drawn walls/braces and removed-fin marks; one Undo restores all | `web/index.html`, `web/ui/settings.js` |
+| **Tests run on Windows** — `urlPath()` turns file URLs into real paths (was `/D:/…`, os error 123); OCCT is evaluated as CommonJS because Deno 2.x `require()` now loads it as an empty ES module. 356/356 pass | `tests/_util.js`, `tests/step.test.js` + 3 tests |
+
 ## Updating from upstream
 `git fetch upstream && git merge upstream/main` — conflicts, if any, will be in the files above.
