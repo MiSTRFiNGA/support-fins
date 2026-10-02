@@ -26,7 +26,7 @@ renderer.domElement.setAttribute(
 viewport.appendChild(renderer.domElement);
 
 export const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x14161a);
+scene.background = new THREE.Color(0x070a12);
 
 export const camera = new THREE.PerspectiveCamera(45, 1, 1, 5000);
 camera.up.set(0, 0, 1);
@@ -70,7 +70,7 @@ export function buildPlate(sx, sy, sz) {
   for (let y = -Math.floor(hy / step) * step; y <= hy; y += step) {
     (Math.abs(y) % 50 === 0 ? major : minor).push(-hx, y, 0, hx, y, 0);
   }
-  for (const [pts, color, opacity] of [[minor, 0x2b303a, 0.9], [major, 0x3d4552, 1]]) {
+  for (const [pts, color, opacity] of [[minor, 0x1c2236, 0.9], [major, 0x34305a, 1]]) {
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
     plate.add(new THREE.LineSegments(
@@ -83,7 +83,7 @@ export function buildPlate(sx, sy, sz) {
     new THREE.Vector3(hx, hy, 0), new THREE.Vector3(-hx, hy, 0),
     new THREE.Vector3(-hx, -hy, 0),
   ]);
-  plate.add(new THREE.Line(edge, new THREE.LineBasicMaterial({ color: 0x5b6472 })));
+  plate.add(new THREE.Line(edge, new THREE.LineBasicMaterial({ color: 0x7c6bc4 })));
 
   // build volume
   const box = new THREE.Box3(

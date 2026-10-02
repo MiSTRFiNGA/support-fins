@@ -154,7 +154,7 @@ const hoverGeom = new THREE.BufferGeometry();
 hoverGeom.setAttribute(
   'position', new THREE.BufferAttribute(new Float32Array(9), 3));
 export const hoverFace = new THREE.Mesh(hoverGeom, new THREE.MeshBasicMaterial({
-  color: 0x4da3ff, transparent: true, opacity: 0.6, side: THREE.DoubleSide,
+  color: 0xa78bfa, transparent: true, opacity: 0.6, side: THREE.DoubleSide,
   depthTest: true, polygonOffset: true,
   polygonOffsetFactor: -4, polygonOffsetUnits: -4,
 }));
@@ -198,7 +198,7 @@ el('lay-face').addEventListener('click', () => {
 export function layHover(ev) {
   const hit = pickFace(ev);
   hoverFace.visible = !!hit;
-  hoverFace.material.color.setHex(0x4da3ff);   // reset from Draw's green/grey tint
+  hoverFace.material.color.setHex(0xa78bfa);   // reset from Draw's green/grey tint
   renderer.domElement.style.cursor = hit ? 'pointer' : '';
   if (!hit) return;
 

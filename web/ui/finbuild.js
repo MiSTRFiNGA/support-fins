@@ -33,7 +33,7 @@ export function setFinTris(tris) {
 }
 
 export const finMaterial = new THREE.MeshStandardMaterial({
-  color: 0x59d98e, roughness: 0.7, metalness: 0.0, side: THREE.DoubleSide,
+  color: 0xb5e61d, roughness: 0.7, metalness: 0.0, side: THREE.DoubleSide,
 });
 // The pad is not a fin -- it is a modification to how the part meets the plate,
 // and the user has to be able to see at a glance which is which before they

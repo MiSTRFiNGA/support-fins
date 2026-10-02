@@ -31,3 +31,8 @@ plugins/freecad/build/
 
 # Blender: built extension zips and the cached mini-racer wheels
 plugins/blender/build/
+
+# HiVEMiND local launcher runtime (logs + app-window browser profile)
+_runtime/
+desktop.ini
+*.lnk

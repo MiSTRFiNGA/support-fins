@@ -34,7 +34,7 @@ let printTris = null;       // whole part in print space, cached per orientation
 let printTrisDirty = true;
 
 export const drawMaterial = new THREE.MeshStandardMaterial({
-  color: 0x59d98e, roughness: 0.7, metalness: 0.0, side: THREE.DoubleSide,
+  color: 0xb5e61d, roughness: 0.7, metalness: 0.0, side: THREE.DoubleSide,
 });
 // A live, translucent preview of the wall the current drag would make.
 const ghostMaterial = new THREE.MeshStandardMaterial({
